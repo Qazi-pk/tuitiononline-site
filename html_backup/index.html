@@ -1,95 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tuition Online</title>
-
   <style>
-    body {
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      background: #f7f9fc;
-      margin: 0;
-      padding: 0;
-      color: #222;
-    }
-    header {
-      background: #2c3e50;
-      color: #fff;
-      padding: 2rem;
-      text-align: center;
-      font-size: 2rem;
-      letter-spacing: 1px;
-    }
-    main {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
-      max-width: 1100px;
-      margin: auto;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      padding: 1.5rem;
-      text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    }
-    a {
-      text-decoration: none;
-      color: #2c3e50;
-      font-weight: 600;
-      display: block;
-      margin-top: 0.5rem;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: #ecf0f1;
-      font-size: 0.9rem;
-      color: #555;
-    }
+    body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:#f7f9fc;margin:0;color:#222;}
+    header{background:#2c3e50;color:#fff;padding:1.8rem;text-align:center;font-size:2rem;}
+    main{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;
+          padding:2rem;max-width:1100px;margin:auto;}
+    .card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);
+           text-align:center;padding:1.2rem;transition:transform .2s,box-shadow .2s;}
+    .card:hover{transform:translateY(-4px);box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+    a{text-decoration:none;color:#2c3e50;font-weight:600;display:block;margin-top:.5rem;}
+    footer{text-align:center;padding:1rem;background:#ecf0f1;color:#555;font-size:.9rem;}
   </style>
 </head>
 <body>
-
   <header>Tuition Online</header>
+  <main><div class="card"><h2>2023</h2><a href="/2023/index.html">Open Section</a></div>
+<div class="card"><h2>2024</h2><a href="/2024/index.html">Open Section</a></div>
+<div class="card"><h2>2025</h2><a href="/2025/index.html">Open Section</a></div></main>
+  <footer>© 2025 Tuition Online — All Rights Reserved</footer>
+  
+<style>
+#searchIcon {
+  position: fixed; top: 15px; right: 20px;
+  z-index: 10001; background: #2c3e50; color: #fff;
+  border-radius: 50%; width: 40px; height: 40px;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 20px; cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+#searchBox {
+  position: fixed; top: 15px; right: 70px;
+  z-index: 10000; padding: 8px 12px;
+  font-size: 1rem; border-radius: 6px;
+  border: 1px solid #ccc; outline: none;
+  width: 0; opacity: 0; transition: width 0.3s ease, opacity 0.3s ease;
+}
+#searchBox.active {
+  width: 200px; opacity: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+@media (max-width:600px) {
+  #searchBox.active { width: 140px; }
+}
+</style>
 
-  <main>
-    <!-- Year 2025 -->
-    <div class="card">
-      <h2>2025 — January</h2>
-      <a href="2025/01/">Open Section</a>
-    </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const icon = document.createElement("div");
+  icon.id = "searchIcon";
+  icon.innerHTML = "&#128269;";
+  document.body.appendChild(icon);
 
-    <div class="card">
-      <h2>2025 — February</h2>
-      <a href="2025/02/">Open Section</a>
-    </div>
+  const input = document.createElement("input");
+  input.type = "search";
+  input.placeholder = "Search...";
+  input.id = "searchBox";
+  document.body.appendChild(input);
 
-    <div class="card">
-      <h2>2025 — April</h2>
-      <a href="2025/04/">Open Section</a>
-    </div>
+  // Restore last query if exists
+  const lastQuery = sessionStorage.getItem("searchQuery") || "";
+  if (lastQuery) {
+    input.value = lastQuery;
+    input.classList.add("active");
+  }
 
-    <!-- You can add older years here -->
-    <!-- Example:
-    <div class="card">
-      <h2>2024 — Archive</h2>
-      <a href="2024/">Open Section</a>
-    </div>
-    -->
-  </main>
+  icon.addEventListener("click", () => {
+    input.classList.toggle("active");
+    if (input.classList.contains("active")) input.focus();
+  });
 
-  <footer>
-    © 2025 Tuition Online — All Rights Reserved
-  </footer>
+  const cards = Array.from(document.querySelectorAll(".card"));
+
+  function filterCards(term) {
+    const query = term.toLowerCase();
+    cards.forEach(c => {
+      const text = c.innerText.toLowerCase();
+      c.style.display = text.includes(query) ? "" : "none";
+    });
+  }
+
+  // Apply filter if memory has something
+  if (lastQuery) filterCards(lastQuery);
+
+  input.addEventListener("input", function() {
+    const term = input.value;
+    sessionStorage.setItem("searchQuery", term);
+    filterCards(term);
+  });
+});
+</script>
 
 </body>
 </html>
